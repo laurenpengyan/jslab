@@ -1,4 +1,3 @@
-
 // Global varables for banner position, images and links
 
 // Current banner index
