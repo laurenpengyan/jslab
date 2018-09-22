@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Japan Gate</title>
+  <script src="button.js"></script>
+</head>
+
+<body>
+  <table width="960" border="0">
+    <tbody>
+      <tr>
+        <td width="170"><img src="images/japanlogo1.jpg" width="233" height="181" /></td>
+        <td width="774">
+          <h1><strong>Japan Gate! Introduction to Japan!</strong></h1>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="centered">
+		<a href="linkPage.html"><img src="images/banner1.gif" id="adBanner" alt="ad banner"></a>
+	</div>
+  <div class="content">
+    <h2>Japanese culture is unique while interesting. </h2>
+    <style>
+      .button {
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+
+      .button1 {
+        background-color: #4CAF50;
+      }
+
+      /* Green */
+
+      .button2 {
+        background-color: #008CBA;
+      }
+
+      /* Blue */
+
+      .button3 {
+        background-color: #f44336;
+      }
+
+      /* Red */
+    </style>
+
+    <button class="button button1" id="Tokyo1">Tokyo</button>
+    <button class="button button2" id="Osaka1">Osaka</button>
+    <button class="button button3" id="Hokkaido1">Hokkaido</button>
+
+    <script language="JavaScript" type="text/javascript">
+      function showTextMessageEmbedded() {
+        switch (this.id) {
+          case "Tokyo1":
+            alert("Capital of world gourmet!");
+            break;
+          case "Osaka1":
+            alert("Only city that you can feel free to neogeotiate price in Japan!");
+            break;
+          case "Hokkaido1":
+            alert("Produce great beer and whisky!");
+            break;
+          default:
+        }
+      }
+    </script>
+
+    <form action="#">
+      <input class="button button2" type="button" id="Tokyo" value="Tokyo">
+      <input class="button button3" type="button" id="Osaka" value="Osaka">
+      <input class="button button1" type="button" id="Hokkaido" value="Hokkaido">
+    </form>
+    <h3><em><strong>It combines the best of the western and eastern
+            culture. </strong></em></h3>
+    <h2>It is <em>safe</em>. It is <em>clean</em>. It is <em>weird</em>
+        but <em>interesting</em>. It is <em>delicious</em>. It is NOT
+        the stereotype that you will see in the Anime at all. </h2>
+    <h2>They are human and NOT perfect and they do have something to
+        improve. </h2>
+    <h2>Some facts you might NOT be aware:</h2>
+    <ol>
+      <li>Tokyo has most Michelin-starred than Paris and it is the No 1 most Michelin stars in the world! &nbsp;No need to turn on the gas and you may spend less. </li>
+      <li>Tokyo has 23 millions people and it ranks no 1 liverable city in the world for multiple years.</li>
+      <li>Japan is known to be expensive to live. &nbsp;This is true for tourist or business travel purposes. But to live cost, it is much lower than the New York, San Francisco and London.</li>
+      <li>Japan's life expectancy is NO 1 in G7 country. It's medical system is a balanced combination of private(like US) and public(like British) system and ranked NO. 1 medical system by WHO.
+      </li>
+      <li>Lunch in the public school are sponsored by the government and prepared by the nutritionist.&nbsp; Students themselves will be responsible for fetch their own lunch and clean them once they finished the lunch.&nbsp; You can watch this <a href="https://www.youtube.com/watch?v=hL5mKE4e4uU">video</a>        for an idea.<br />
+      </li>
+    </ol>
+  </div>
+  <p id="date"></sp>
+  <script>
+    document.getElementById("date").innerHTML = Date();
+  </script>
+</body>
+
+</html>
