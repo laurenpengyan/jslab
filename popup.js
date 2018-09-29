@@ -17,8 +17,23 @@ function py_newWinLinks() {
     }
 }
 
+/*
+Callback method when the link is clicked.
+The link will be shown in a popup window and get focus.
+Also disable the default link click behavior in the current window to redirect to the link.
+ */
 function py_newWindow() {
+
+    // To open a pop window using the href attribute value from the link clicked
+    // Name the window as makeupWindow
+    // Specify the popup window location and size for better viewing
     var mpadWindow = window.open(this.href, "makeupWindow", "width=500,height=300,top=250,left=650");
+
+    // Make the newly window to get focus and show on top
     mpadWindow.focus();
+
+    // As this is callback in link click, 
+    // return false to disable the default link click behavior in the current window to redirect to the link.
     return false;
+
 }
