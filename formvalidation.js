@@ -70,6 +70,9 @@ function validForm() {
 					classBack += thisClass;
 					break;
 				case "email":
+				    if (allGood && !validEmail(thisTag.value)){
+						classBack = "invalid ";
+					}
 					classBack += thisClass;
 					break;
 				default:
@@ -78,6 +81,7 @@ function validForm() {
 					}
 					classBack += thisClass;
 			}
+			
 			return classBack;
 				
 			function crossCheck(inTag,otherFieldID) {
@@ -120,6 +124,31 @@ function validForm() {
 					return true;
 				}
 				return (isNum(inZip));
+			}
+
+			function validEmail(email) {
+				var invalidChars = " /:,;";
+				if (email == "") {
+					return false;
+				}
+				for (var k = 0; k < invalidChars.length; k++) {
+					var badChar = invalidChars.charAt(k);
+					if (email.indexOf(badChar) > -1) {
+						return false;
+					}
+				}
+				var atPos = email.indexOf("@", 1);
+				if (email.indexOf("@", atPos + 1) != -1) {
+					return false;
+				}
+				var periodPos = email.indexOf('.', atPos);
+				if (periodPos == -1) {
+					return false;
+				}
+				if (periodPos + 3 > email.length) {
+					return false;
+				}
+				return true;
 			}
 		}
 	}
