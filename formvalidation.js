@@ -4,6 +4,7 @@ function initForm() {
 	document.forms[0].onsubmit = validForm;
 	document.getElementById("sunroof").onclick = doorSet;
 	document.getElementById("fourDoor").onclick = fourDoorSet;
+	document.getElementById("withDependent").onclick = withDependentClick;
 }
 
 function validForm() {
@@ -141,5 +142,18 @@ function fourDoorSet() {
 
 	if (sunroof.checked) {
 		sunroof.checked = false;
+	}
+}
+
+function withDependentClick() {
+	var numDependents = document.getElementById("numDependents");
+
+	if (this.checked) {
+		numDependents.disabled = false;
+		if (numDependents.value == "") {
+			numDependents.value = "1";
+		}
+	} else {
+		numDependents.disabled = true;
 	}
 }
