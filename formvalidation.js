@@ -3,6 +3,7 @@ window.onload = initForm;
 function initForm() {
 	document.forms[0].onsubmit = validForm;
 	document.getElementById("sunroof").onclick = doorSet;
+	document.getElementById("fourDoor").onclick = fourDoorSet;
 }
 
 function validForm() {
@@ -132,5 +133,13 @@ function validForm() {
 function doorSet() {
 	if (this.checked) {
 		document.getElementById("twoDoor").checked = true;
+	}
+}
+
+function fourDoorSet() {
+	var sunroof = document.getElementById("sunroof");
+
+	if (sunroof.checked) {
+		sunroof.checked = false;
 	}
 }
