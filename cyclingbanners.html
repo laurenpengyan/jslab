@@ -2,13 +2,17 @@
 <html>
 <head>
 	<title>Yan Peng's Bingo Card</title>
-	
+
 	<link rel="stylesheet" href="bingo.css">
 	<link rel="stylesheet" href="script01.css"> <!-- Style for banner -->
-	
+	<script>
+	  function goBack(){
+		window.history.back();
+	}
+	</script>
 	<script src="bingo.js"></script>
 	<script src="cyclingbanner.js"></script> <!-- Banner script -->
-	
+
 	<meta name="viewport" content="height=800, width=560" />
 	<script language="javascript">
 
@@ -75,5 +79,6 @@
 	</tr>
 </table>
 <p><a href="bingocards.html" id="reload">Click here</a> to create a new card</p>
+<button onclick = "goBack()">Go Back</button>
 </body>
 </html>
