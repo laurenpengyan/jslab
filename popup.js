@@ -32,7 +32,7 @@ function py_newWindow() {
     // Make the newly window to get focus and show on top
     mpadWindow.focus();
 
-    // As this is callback in link click, 
+    // As this is callback in link click,
     // return false to disable the default link click behavior in the current window to redirect to the link.
     return false;
 
