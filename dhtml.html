@@ -7,16 +7,27 @@
 </head>
 
 <body>
-    
-               
-    <p style="font-size:50px;" id="timer"></p>
+
+
+    <div style="font-size:50px; position: absolute;" id="timer"></div>
 
     <script>
-        myTimer(); 
-        var myVar = setInterval(myTimer, 1000);
+        myTimer();
+        var myVar = setInterval(myMove, 1000);
         function myTimer() {
             var d = new Date();
             document.getElementById("timer").innerHTML = d.toLocaleTimeString();
+        }
+
+        function myMove() {
+            var elem = document.getElementById("timer");
+            
+            myTimer();
+            
+            var pos1 =  Math.floor(Math.random()* 350);
+            var pos2 = Math.floor(Math.random() * 350);
+            elem.style.top = pos1 + 'px';
+            elem.style.left = pos2 + 'px';
         }
     </script>
     <li><a href="index.html">Back</a></li>
