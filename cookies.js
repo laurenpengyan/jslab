@@ -26,5 +26,4 @@ function showVisitInfo() {
     document.cookie = "last_visit=" + new Date();
     document.cookie = "visit_count=" + (++visit_count);
 
-    alert(document.cookie);
 }
