@@ -3,9 +3,9 @@
 // Current banner index
 var theAd = 0;
 // Array of the links of the banners
-var adURL = ["joescrabshack.com", "coffeecatz.net", "pepto-bismol.com"];
+var adURL = ["global.rakuten.com/en/event/welcome/?l-id=rgm-top-en-welcome", "coffeecatz.net", "pepto-bismol.com"];
 // Array of the images of the banners
-var adImages = ["images/banner1.gif", "images/banner2.gif", "images/banner3.gif"];
+var adImages = ["images/quickstart.png", "images/banner2.gif", "images/banner3.gif"];
 
 // Initialize banner link
 function py_initBannerLink() {

@@ -16,20 +16,37 @@
             margin: 0 auto;
         }
     </style>
-    <script src="cookies.js"></script>
-</head>
 
+    <script src="cookies.js"></script>
+    
+    <link rel="stylesheet" href="script01.css"> <!-- Style for banner -->
+    <script src="cyclingbanner.js"></script> <!-- Banner script -->
+
+    <script language="javascript">
+
+        // Calls the py_initBannerLink function when the window finishes loading.
+        window.onload = py_initBannerLink;
+    </script>
+    
+</head>
+ 
 <body>
 
-    <canvas id="myCanvas" width="480" height="320"></canvas>
+    <div class="centered">
+        <a href="linkPage.html"><img src="images/banner1.gif" id="adBanner" alt="ad banner"></a>
+    </div>
+    <center>
+        <canvas id="myCanvas" width="505" height="350"></canvas>
+    </center>
+
 
     <script src="game.js"></script>
-    <script>
-        var person = prompt("Please enter your name:");
-    </script>
+    
 	<h4>Last Visit: <span id="last_visit">N/A</span></h4>
-	<h4>Visit Count: <span id="visit_count">N/A</span></h4>
-
+    <h4>Visit Count: <span id="visit_count">N/A</span></h4>
+    <li><a href="game.html">Restart Game</a></li>
+    <li><a href="index.html">Back</a></li>
+     
 </body>
 
 </html>

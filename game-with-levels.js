@@ -10,13 +10,13 @@ var paddleWidth = 75;
 var paddleX = (canvas.width - paddleWidth) / 2;
 var rightPressed = false;
 var leftPressed = false;
-var brickRowCount = 5;
-var brickColumnCount = 3;
+var brickRowCount = 6;
+var brickColumnCount = 2;
 var brickWidth = 75;
 var brickHeight = 20;
-var brickPadding = 10;
+var brickPadding = 8;
 var brickOffsetTop = 30;
-var brickOffsetLeft = 30;
+var brickOffsetLeft = 8; 
 var player = '';
 var score = 0;
 var lives = 3;
@@ -75,7 +75,11 @@ function collisionDetection() {
                     score++;
                     if (score == brickRowCount * brickColumnCount) {
                         alert("YOU WIN, CONGRATS!");
-                        document.location.reload();
+                        // document.location.reload();
+                        // next level is call draw again
+                        return 1;
+                    } else {
+                        return 0;
                     }
                 }
             }
@@ -148,7 +152,11 @@ function draw() {
     drawPaddle();
     drawScore();
     drawLives();
-    collisionDetection();
+    var result = collisionDetection();
+    if (result == 1) {
+        // 1 is won
+        return 1;
+    }
 
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
         dx = -dx;
@@ -165,6 +173,7 @@ function draw() {
             if (!lives) {
                 alert("GAME OVER");
                 document.location.reload();
+                // return 0
             }
             else {
                 x = canvas.width / 2;
@@ -187,7 +196,16 @@ function draw() {
     y += dy;
 
     // Pass the draw function as the requestAnimationFrame callback.
-    requestAnimationFrame(draw);
+    var result = requestAnimationFrame(draw);
 }
 
-draw();
+// wrap this is a loop and call it for each level.
+var result = draw(dx, dy);
+if (result = 1) {
+    dx += 2;
+    dy += 2;
+    // call draw
+} else {
+    // player lost
+    // reload
+}
