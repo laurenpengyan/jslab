@@ -19,10 +19,24 @@ var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
 var player = '';
 var score = 0;
-var lives = 3;
+var baseScore = 0;
+var lives = 30;
+
+
+// Set initial speed
+if (sessionStorage.getItem("game_speed")) {
+    dx = sessionStorage.getItem("game_speed") + 2;
+    dy = -dx; 
+}
+
+if (sessionStorage.getItem("game_score")) {
+    baseScore = Number(sessionStorage.getItem("game_score"));
+}
+
 
 var bricks = [];
 for (var c = 0; c < brickColumnCount; c++) {
+    // Initialize column bricks
     bricks[c] = [];
     for (var r = 0; r < brickRowCount; r++) {
         bricks[c][r] = { x: 0, y: 0, status: 1 };
@@ -74,7 +88,12 @@ function collisionDetection() {
                     b.status = 0;
                     score++;
                     if (score == brickRowCount * brickColumnCount) {
+                        window.sessionStorage.setItem('game_status', 'WON');
+                        window.sessionStorage.setItem('game_speed', dx);
+                        window.sessionStorage.setItem('game_score', (baseScore + score));
+
                         alert("YOU WIN, CONGRATS!");
+                        
                         document.location.reload();
                     }
                 }
@@ -124,7 +143,7 @@ function drawName() {
 function drawScore() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
-    ctx.fillText("Score: " + score, 8, 20);
+    ctx.fillText("Score: " + (baseScore + score), 8, 20);
 }
 function drawLives() {
     ctx.font = "16px Arial";
@@ -163,6 +182,10 @@ function draw() {
         else {
             lives--;
             if (!lives) {
+                sessionStorage.removeItem("game_speed");
+                sessionStorage.removeItem("game_score");
+                sessionStorage.setItem("game_status", "LOST");
+                
                 alert("GAME OVER");
                 document.location.reload();
             }
