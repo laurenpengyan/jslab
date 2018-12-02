@@ -25,7 +25,7 @@ function animateEyes(xPos, yPos) {
 
 	//function to get the new coordinates of the eyes.
 	function newEyeballPos(currPos, eyePos) {
-		return Math.min(Math.max(currPos, eyePos + 3), eyePos + 17) + "px";
+		return Math.min(Math.max(currPos, eyePos + 3), eyePos + 10) + "px";
 	}
 }
 

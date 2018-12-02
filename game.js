@@ -1,16 +1,16 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-var ballRadius = 10;
+var ballRadius = 15;
 var x = canvas.width / 2;
-var y = canvas.height - 30;
+var y = canvas.height;
 var dx = 2;
 var dy = -2;
 var paddleHeight = 10;
-var paddleWidth = 95;
+var paddleWidth = 110;
 var paddleX = (canvas.width - paddleWidth) / 2;
 var rightPressed = false;
 var leftPressed = false;
-var brickRowCount = 5;
+var brickRowCount = 4;
 var brickColumnCount = 2;
 var brickWidth = 75;
 var brickHeight = 20;
@@ -127,7 +127,7 @@ function drawBricks() {
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = "#0095DD";
+                ctx.fillStyle = "#246BE6";
                 ctx.fill();
                 ctx.closePath();
             }
@@ -136,18 +136,18 @@ function drawBricks() {
 }
 function drawName() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#246BE6";
     ctx.fillText('Player: ' + player, (canvas.width / 2) - 60, 20);
 }
 
 function drawScore() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#246BE6";
     ctx.fillText("Score: " + (baseScore + score), 8, 20);
 }
 function drawLives() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#E62499";
     ctx.fillText("Lives: " + lives, canvas.width - 70, 20);
 }
 
