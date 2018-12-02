@@ -1,3 +1,6 @@
+
+document.onmousemove = moveHandler; 
+
 function moveHandler(evt) {
 	//If the user has IE, the event needs to be initialized
 	if (!evt) {
