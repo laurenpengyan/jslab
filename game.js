@@ -1,18 +1,18 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-var ballRadius = 15;
+var ballRadius = 10;
 var x = canvas.width / 2;
 var y = canvas.height;
-var dx = 2;
-var dy = -2;
-var paddleHeight = 10;
-var paddleWidth = 110;
+var dx = 3;
+var dy = -3;
+var paddleHeight = 15;
+var paddleWidth = 140;
 var paddleX = (canvas.width - paddleWidth) / 2;
 var rightPressed = false;
 var leftPressed = false;
 var brickRowCount = 4;
 var brickColumnCount = 2;
-var brickWidth = 75;
+var brickWidth = 100;
 var brickHeight = 20;
 var brickPadding = 10;
 var brickOffsetTop = 30;
@@ -106,14 +106,14 @@ function collisionDetection() {
 function drawBall() {
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#C6E624";
     ctx.fill();
     ctx.closePath();
 }
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#24E6B9";
     ctx.fill();
     ctx.closePath();
 }
@@ -136,8 +136,8 @@ function drawBricks() {
 }
 function drawName() {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#246BE6";
-    ctx.fillText('Player: ' + player, (canvas.width / 2) - 60, 20);
+    ctx.fillStyle = "#E69F24";
+    ctx.fillText('Player: ' + player, (canvas.width / 2) - 40, 20);
 }
 
 function drawScore() {
@@ -192,8 +192,8 @@ function draw() {
             else {
                 x = canvas.width / 2;
                 y = canvas.height - 30;
-                dx = 3;
-                dy = -3;
+                dx = 4;
+                dy = -4;
                 paddleX = (canvas.width - paddleWidth) / 2;
             }
         }
