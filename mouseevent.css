@@ -1,0 +1,36 @@
+#lEye, #rEye {
+	position: absolute;
+	top: 77px;
+	width: 24px;
+	height: 25px;
+}
+
+#lDot, #rDot {
+	position: absolute;
+	top: 82px;
+	width: 4px;
+	height: 4px;
+}
+
+#lEye {
+	left: 115px;
+}
+
+#rEye {
+	left: 175px;
+}
+
+#lDot {
+	left: 133px;
+}
+
+#rDot {
+	left: 193px;
+}
+
+#bear {
+    margin-left: 50px;
+    width: 156px;
+	height: 139px;
+}
+
