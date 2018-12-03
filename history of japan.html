@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>History of Japan</title>
+    <script src="button.js"></script>
+  </head>
+  <body>
+    <table border="0" width="960">
+      <tbody>
+        <tr>
+          <td width="170"><img src="images/hiroshima.jpg" height="181" width="233"></td>
+          <td width="774">
+            <h1><strong>Histoy of Japan</strong></h1>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="content">
+      <h2>From the Defeat of War to Today </h2>
+      <style>
+      .button {
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+
+      .button1 {
+        background-color: #4CAF50;
+      }
+
+      /* Green */
+
+      .button2 {
+        background-color: #008CBA;
+      }
+
+      /* Blue */
+
+      .button3 {
+        background-color: #f44336;
+      }
+
+      /* Red */
+    </style> <button class="button button1" id="Tokyo1">Tokyo</button> <button
+        class="button button2"
+        id="Osaka1">Osaka</button>
+      <button class="button button3" id="Hokkaido1">Hokkaido</button>
+      <script language="JavaScript" type="text/javascript">
+      function showTextMessageEmbedded() {
+        switch (this.id) {
+          case "Tokyo1":
+            alert("Capital of world gourmet!");
+            break;
+          case "Osaka1":
+            alert("Only city that you can feel free to neogeotiate price in Japan!");
+            break;
+          case "Hokkaido1":
+            alert("Produce great beer and whisky!");
+            break;
+          default:
+        }
+      }
+    </script>
+      <form action="#"> <input class="button button2" id="Tokyo" value="Tokyo"
+type="button">
+        <input class="button button3" id="Osaka" value="Osaka" type="button"> <input
+class="button button1"
+id="Hokkaido"
+value="Hokkaido"
+type="button">
+      </form>
+      <h3><em><strong>It combines the best of the western and eastern culture. </strong></em></h3>
+      <h2>It is <em>safe</em>. It is <em>clean</em>. It is <em>weird</em>
+        but <em>interesting</em>. It is <em>delicious</em>. It is NOT the
+        stereotype that you will see in the Anime at all. </h2>
+      <h2>They are human and NOT perfect and they do have something to improve.
+      </h2>
+      <h2>Some facts you might NOT be aware:</h2>
+      <ol>
+        The emergence of Yamato Court
+In the early Stone Age, the Japanese archipelago was connected with the Asian continent.
+
+People lived by hunting and gathering, using crude stone tools. In the Yayoi period, they started rice cultivation as a main livelihood and formed local groups. In 239, Himiko, the queen of Yamatai, governed about 30 local groups and sent an envoy to the Kingdom of Wei in China.
+
+In the late 3rd century, the Yamato Dynasty, centered around the emperor, started to expand its presence. Massive kofun (tumuli) represents the power it wielded. Afterwards, Prince Shotoku and the Emperor Temmu formed a penal and administrative system based on the Chinese model. The governing center was moved to Asuka, where the Yamato court enjoyed stability. Buddhism also started to flourish in this period.
+        
+      </ol>
+    </div>
+    <p id="date">
+      <script>
+    document.getElementById("date").innerHTML = Date();
+  </script> </p>
+    <li><a href="index.html">Back</a></li>
+  </body>
+</html>
