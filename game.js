@@ -4,13 +4,13 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 // Set the ball radius.
 var ballRadius = 10;
-// Set the game board size.
+// Sets the ball's initial x and y coordinates
 var x = canvas.width / 2;
 var y = canvas.height - 30;
-// Initialize the ball speed variables.
+// Initialize the velocity of the ball.
 var dx = 3;
 var dy = -3;
-// Set paddle size 
+// Set paddle size
 var paddleHeight = 15;
 var paddleWidth = 140;
 //
@@ -35,7 +35,7 @@ var lives = 30;
 var paused = false;
 var level = 1;
 
-// Fetch the key/value pairs from the sessionStore object which stores the values in the window memory. 
+// Fetch the key/value pairs from the sessionStore object which stores the values in the window memory.
 // The sessionStorage object stores data for only one session unlike localStorage. Therefore these values will
 // only be set from sessionStorage if the user recently played at least one game. Otherwise the default values
 // will be used.
@@ -63,9 +63,9 @@ for (var c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
     for (var r = 0; r < brickRowCount; r++) {
         // Initialize the x and y to zero and status to one. Status of one means the brick is still active
-        // and should be displayed on the screen. Zero means the brick has been desroyed from a collision and is 
-        // no longer active or displayed on the screen. 
-        bricks[c][r] = { x: 0, y: 0, status: 1 };   
+        // and should be displayed on the screen. Zero means the brick has been desroyed from a collision and is
+        // no longer active or displayed on the screen.
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
     }
 }
 
@@ -74,7 +74,7 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
-// Check which arrow key was pressed. 
+// Check which arrow key was pressed.
 // When a button pressed the value will remain true until the  user release's the key and the keyUpHandler is called.
 function keyDownHandler(e) {
     if (e.keyCode == 39) {
@@ -105,12 +105,12 @@ function mouseMoveHandler(e) {
 
 function collisionDetection() {
     // Nested loop through the 2d array to check if a collision occured with any of the remaining blocks.
-    // Adjust score accordingly and check if game over scenario is reached. 
+    // Adjust score accordingly and check if game over scenario is reached.
     for (var c = 0; c < brickColumnCount; c++) {
         for (var r = 0; r < brickRowCount; r++) {
             var b = bricks[c][r];
             if (b.status == 1) {
-                // The x and y variables correspond to the ball's x and y location. 
+                // The x and y variables correspond to the ball's x and y location.
                 // Compare these with the brick's (var b) x and y properties to see if there has been a collision.
                // If there is a collision this next block of code will be executed.
                 if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
@@ -159,10 +159,10 @@ function drawBricks() {
         for (var r = 0; r < brickRowCount; r++) {
             if (bricks[c][r].status == 1) {
                 // Multiple the bricks x and y coordinates by its respective row and column number
-                // so that it is drawn to the correct location on the screen. 
+                // so that it is drawn to the correct location on the screen.
                 var brickX = (r * (brickWidth + brickPadding)) + brickOffsetLeft;
                 var brickY = (c * (brickHeight + brickPadding)) + brickOffsetTop;
-                // Set the brick's x and y properties to check later for collision detection. 
+                // Set the brick's x and y properties to check later for collision detection.
                 bricks[c][r].x = brickX;
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
@@ -198,7 +198,7 @@ function drawLives() {
     ctx.fillText("Lives: " + lives, canvas.width - 70, 20);
 }
 
-// Function to handle game logic until a base case is reached. 
+// Function to handle game logic until a base case is reached.
 function draw() {
     if (!paused){
     if (window.sessionStorage.getItem('player') == null) {
@@ -218,16 +218,17 @@ function draw() {
     drawLives();
     collisionDetection();
 
-    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+    // collision of ball with top, bottom, right, left, and paddle
+    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {  //bounce ball off right side OR left side
         dx = -dx;
     }
 
-    if (y + dy < ballRadius) {
+    if (y + dy < ballRadius) { // handle ball bouncing off top
         dy = -dy;
-    } else if (y + dy > canvas.height - ballRadius) {
-        if (x > paddleX && x < paddleX + paddleWidth) {
+    } else if (y + dy > canvas.height - ballRadius) {  // reached botton (die) or bounce off paddle
+        if (x > paddleX && x < paddleX + paddleWidth) {  // bounce off paddle
             dy = -dy;
-        } else {
+        } else {  // die
             lives--;
             if (lives === 0) {
                 sessionStorage.removeItem("game_speed");
@@ -245,6 +246,8 @@ function draw() {
         }
     }
 
+    // next two sections control the variable that change, rather the shapres that move
+
     // If the user pressed the left or right arrows move the paddle. Also check to make sure the paddle does not leave the screen.
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
         paddleX += 7;
@@ -254,17 +257,16 @@ function draw() {
 
     x += dx;
     y += dy;
-    console.log('dx, dy: ' + dx + ' - ' + dy);
 
 }
 
     // Pass the draw function as the requestAnimationFrame callback.
     // This function is called everytime the browser screen is repainted.
-    // By calling the requestAnimationFrame function within the draw function and passing the draw function 
+    // By calling the requestAnimationFrame function within the draw function and passing the draw function
     // as its callback parameter a recursive loop is started that will not reach the base case until the
-    //  user wins or loses the game. 
+    //  user wins or loses the game.
     requestAnimationFrame(draw);
 }
 
-// Call the draw fuction here first to start the recursion. 
+// Call the draw fuction here first to start the recursion.
 draw();
