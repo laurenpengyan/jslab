@@ -1,13 +1,13 @@
-// Get the canvas element from the HTML document. The canvas element is used to draw graphics on a web page.
+//Get the canvas element from the HTML document. The canvas element is used to draw graphics on a web page.
 var canvas = document.getElementById("myCanvas");
 // This variable contains the 2 dimensional contexts from the canvas element.
 var ctx = canvas.getContext("2d");
 // Set the ball radius.
 var ballRadius = 10;
-// Sets the ball's initial x and y coordinates
+// Set the game board size.
 var x = canvas.width / 2;
 var y = canvas.height - 30;
-// Initialize the velocity of the ball.
+// Initialize the ball speed variables.
 var dx = 3;
 var dy = -3;
 // Set paddle size
@@ -123,7 +123,7 @@ function collisionDetection() {
                     // the total number of bricks then all the bricks must now be cleared and the game should reset
                     // and continue to the next level.
                     if (score == brickRowCount * brickColumnCount) {
-                        dx = Math.abs(dx) + 2;
+                        dx = Math.abs(dx) + 3;
                         level++;
                         window.sessionStorage.setItem('game_status', 'WON');
                         window.sessionStorage.setItem('game_speed', Math.abs(dx));
@@ -198,76 +198,90 @@ function drawLives() {
     ctx.fillText("Lives: " + lives, canvas.width - 70, 20);
 }
 
-// Function to handle game logic until a base case is reached.
-function draw() {
-    if (!paused){
-    if (window.sessionStorage.getItem('player') == null) {
-        player = prompt('Please enter your name:');
-        window.sessionStorage.setItem('player', player);
-    } else {
-        player = window.sessionStorage.getItem('player');
-    }
+function updateBall() {
+  // Check to see if ball will hit left or right edge and reverse direction.
+  if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+      dx = -dx;
+  }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawName();
-    drawBricks();
-    drawBall();
-    drawPaddle();
-    drawLevel();
-    drawScore();
-    drawLives();
-    collisionDetection();
+  // Check to see if ball will hit top edge and reverse (bounce).
+  if (y + dy < ballRadius) {
+      dy = -dy;
+  // Check if ball will go below bottom edge or hit paddle.
+  } else if (y + dy > canvas.height - ballRadius) {
+      // If ball hits paddle, change direction (bounce up).
+      if (x > paddleX && x < paddleX + paddleWidth) {
+          dy = -dy;
+      } else {
+          // Ball missed. Lose life.
+          lives--;
 
-    // collision of ball with top, bottom, right, left, and paddle
-        if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {  //bounce ball off right side OR left side
-                
-        dx = -dx;
-    }
+          // If all lives gone, end game.
+          if (lives === 0) {
+              sessionStorage.removeItem("game_speed");
+              sessionStorage.removeItem("game_score");
+              sessionStorage.removeItem("game_level");
+              sessionStorage.setItem("game_status", "LOST");
+              alert("You died. Game over.");
+              document.location.reload();
+          } else {
+              // Tell the player they died and reset ball.
+              alert("You died");
+              x = canvas.width / 2;
+              y = canvas.height - 30;
+              paddleX = (canvas.width - paddleWidth) / 2;
+          }
+      }
+  }
 
-    if (y + dy < ballRadius) { // handle ball bouncing off top
-        dy = -dy;
-    } else if (y + dy > canvas.height - ballRadius) {  // reached botton (die) or bounce off paddle
-        if (x > paddleX && x < paddleX + paddleWidth) {  // bounce off paddle
-            dy = -dy;
-        } else {  // die
-            lives--;
-            if (lives === 0) {
-                sessionStorage.removeItem("game_speed");
-                sessionStorage.removeItem("game_score");
-                sessionStorage.removeItem("game_level");
-                sessionStorage.setItem("game_status", "LOST");
-                alert("You died. Game over.");
-                document.location.reload();
-            } else {
-                alert("You died");
-                x = canvas.width / 2;
-                y = canvas.height - 30;
-                paddleX = (canvas.width - paddleWidth) / 2;
-            }
-        }
-    }
+  // If pressing right and paddle not fully right then shift paddle right.
+  if (rightPressed && paddleX < canvas.width - paddleWidth) {
+      paddleX += 7;
+  // If pressing left and paddle not fully left then shift paddle left.
+  } else if (leftPressed && paddleX > 0) {
+      paddleX -= 7;
+  }
 
-    // next two sections control the variable that change, rather the shapres that move
-
-    // If the user pressed the left or right arrows move the paddle. Also check to make sure the paddle does not leave the screen.
-    if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 7;
-    } else if (leftPressed && paddleX > 0) {
-        paddleX -= 7;
-    }
-
-    x += dx;
-    y += dy;
-
+  // Update ball position for next frame.
+  x += dx;
+  y += dy;
+  console.log('dx, dy: ' + dx + ' - ' + dy);
 }
+
+// Get player name from storage, or prompt for name.
+function checkPlayer() {
+  if (window.sessionStorage.getItem('player') == null) {
+      player = prompt('Please enter your name:');
+      window.sessionStorage.setItem('player', player);
+  } else {
+      player = window.sessionStorage.getItem('player');
+  }
+}
+
+// Draw game and update ball, bricks and collisions/bounces.
+function updateGame() {
+    if (!paused) {
+      checkPlayer();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawName();
+      drawBricks();
+      drawBall();
+      drawPaddle();
+      drawLevel();
+      drawScore();
+      drawLives();
+      collisionDetection();
+      updateBall();
+  }
 
     // Pass the draw function as the requestAnimationFrame callback.
     // This function is called everytime the browser screen is repainted.
     // By calling the requestAnimationFrame function within the draw function and passing the draw function
     // as its callback parameter a recursive loop is started that will not reach the base case until the
     //  user wins or loses the game.
-    requestAnimationFrame(draw);
+    requestAnimationFrame(updateGame);
 }
 
 // Call the draw fuction here first to start the recursion.
-draw();
+updateGame();
+
