@@ -2,18 +2,23 @@
 var canvas = document.getElementById("ypGameCanvas");
 // This variable contains the 2 dimensional contexts from the canvas element.
 var ctx = canvas.getContext("2d");
+
+// Ball size
 var ballSize = 10;
+
 // Sets the ball's initial x and y coordinates
 var x = canvas.width / 2;
 var y = canvas.height - 30;
+
 // Initialize the velocity of the ball.
 var dx = 3;
 var dy = -3;
+
 // Set board size
-var boardHeight = 15;
-var boardWidth = 140;
+var bh = 15;
+var bw = 140;
 //
-var boardX = (canvas.width - boardWidth) / 2;
+var boardX = (canvas.width - bw) / 2;
 // Variables used to dectect the user's keyboard interaction.
 var rightPressed = false;
 var leftPressed = false;
@@ -96,13 +101,13 @@ function keyUpHandler(e) {
 
 // Listener to dectect mouse movement so that the user can also use the mouse to move the board instead of the arrow keys.
 function mouseMoveHandler(e) {
-    var relativeX = e.clientX - canvas.offsetLeft;
-    if (relativeX > 0 && relativeX < canvas.width) {
-        boardX = relativeX - boardWidth / 2;
+    var rx = e.clientX - canvas.offsetLeft;
+    if (rx > 0 && rx < canvas.width) {
+        boardX = rx - bw / 2;
     }
 }
 
-function collisionDetection() {
+function attackTest() {
     // Nested loop through the 2d array to check if a collision occured with any of the remaining blocks.
     // Adjust score accordingly and check if game over scenario is reached.
     for (var c = 0; c < blockColumnCount; c++) {
@@ -137,18 +142,29 @@ function collisionDetection() {
     }
 }
 
+function getColor() {
+    var result = '#';
+
+    var hc = '0123456789ABCDEF';
+    for (var i = 0; i < 6; i++) {
+        result += hc[Math.floor(Math.random() * 16)];
+    }
+    return result;
+}
+
 // Draw helper functions.
 // Everytime when painting to the 2d canvas beginPath() must called first. After painting closePath().
 function paintBall() {
     ctx.beginPath();
     ctx.arc(x, y, ballSize, 0, Math.PI * 2);
     ctx.fillStyle = "#C6E624";
+    ctx.fillStyle = getColor();
     ctx.fill();
     ctx.closePath();
 }
 function paintPaddle() {
     ctx.beginPath();
-    ctx.rect(boardX, canvas.height - boardHeight, boardWidth, boardHeight);
+    ctx.rect(boardX, canvas.height - bh, bw, bh);
     ctx.fillStyle = "#24E6B9";
     ctx.fill();
     ctx.closePath();
@@ -166,7 +182,8 @@ function paintBlocks() {
                 blocks[c][r].y = blockY;
                 ctx.beginPath();
                 ctx.rect(blockX, blockY, blockWidth, blockHeight);
-                ctx.fillStyle = "#F5B6CD";
+                // Use random color: "#F5B6CD";
+                ctx.fillStyle = getColor();
                 ctx.fill();
                 ctx.closePath();
             }
@@ -215,7 +232,7 @@ function paint() {
     paintLevel();
     paintScore();
     paintChances();
-    collisionDetection();
+    attackTest();
 
     // collision of ball with top, bottom, right, left, and board
         if (x + dx > canvas.width - ballSize || x + dx < ballSize) {  //bounce ball off right side OR left side
@@ -226,7 +243,7 @@ function paint() {
     if (y + dy < ballSize) { // handle ball bouncing off top
         dy = -dy;
     } else if (y + dy > canvas.height - ballSize) {  // reached botton (die) or bounce off board
-        if (x > boardX && x < boardX + boardWidth) {  // bounce off board
+        if (x > boardX && x < boardX + bw) {  // bounce off board
             dy = -dy;
         } else {  // die
             chances--;
@@ -241,7 +258,7 @@ function paint() {
                 alert("You died");
                 x = canvas.width / 2;
                 y = canvas.height - 30;
-                boardX = (canvas.width - boardWidth) / 2;
+                boardX = (canvas.width - bw) / 2;
             }
         }
     }
@@ -249,7 +266,7 @@ function paint() {
     // next two sections control the variable that change, rather the shapres that move
 
     // If the user pressed the left or right arrows move the board. Also check to make sure the board does not leave the screen.
-    if (rightPressed && boardX < canvas.width - boardWidth) {
+    if (rightPressed && boardX < canvas.width - bw) {
         boardX += 7;
     } else if (leftPressed && boardX > 0) {
         boardX -= 7;
