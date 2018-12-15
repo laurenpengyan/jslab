@@ -19,7 +19,7 @@ var bh = 15;
 var bw = 140;
 //
 var bx = (canvas.width - bw) / 2;
-// Variables used to dectect the user's keyboard interaction.
+// Variables used to detect the user's keyboard interaction.
 var rightArrowDown = false;
 var leftArrowDown = false;
 // Set number of blocks and set the blocks size.
@@ -31,7 +31,7 @@ var blockHeight = 20;
 var blockPadding = 8;
 var blockOffsetTop = 30;
 var blockOffsetLeft = 8;
-// Initialize the game varialbes
+// Initialize the game variables
 var player = '';
 var point = 0;
 var basePoint = 0;
@@ -67,7 +67,7 @@ for (var c = 0; c < blockColumnCount; c++) {
     blocks[c] = [];
     for (var r = 0; r < blockRowCount; r++) {
         // Initialize the x and y to zero and status to one. Status of one means the block is still active
-        // and should be displayed on the screen. Zero means the block has been desroyed from a collision and is
+        // and should be displayed on the screen. Zero means the block has been destroyed from a collision and is
         // no longer active or displayed on the screen.
         blocks[c][r] = { x: 0, y: 0, status: 1 };
     }
@@ -107,8 +107,8 @@ function mouseMoveHandler(e) {
     }
 }
 
-function attackTest() {
-    // Nested loop through the 2d array to check if a collision occured with any of the remaining blocks.
+function checkCollision() {
+    // Nested loop through the 2d array to check if a collision occurred with any of the remaining blocks.
     // Adjust point accordingly and check if game over scenario is reached.
     for (var c = 0; c < blockColumnCount; c++) {
         for (var r = 0; r < blockRowCount; r++) {
@@ -154,7 +154,7 @@ function getColor() {
 }
 
 // Draw helper functions.
-// Everytime when painting to the 2d canvas beginPath() must called first. After painting closePath().
+// Every time when painting to the 2d canvas beginPath() must called first. After painting closePath().
 function paintBall() {
     context.beginPath();
     context.arc(x, y, ballSize, 0, Math.PI * 2);
@@ -234,7 +234,7 @@ function paint() {
     paintLevel();
     paintPoint();
     paintChances();
-    attackTest();
+    checkCollision();
 
     // collision of ball with top, bottom, right, left, and board
         if (x + dx > canvas.width - ballSize || x + dx < ballSize) {  //bounce ball off right side OR left side
@@ -244,7 +244,7 @@ function paint() {
 
     if (y + dy < ballSize) { // handle ball bouncing off top
         dy = -dy;
-    } else if (y + dy > canvas.height - ballSize) {  // reached botton (die) or bounce off board
+    } else if (y + dy > canvas.height - ballSize) {  // reached bottom (die) or bounce off board
         if (x > bx && x < bx + bw) {  // bounce off board
             dy = -dy;
         } else {  // die
@@ -265,7 +265,7 @@ function paint() {
         }
     }
 
-    // next two sections control the variable that change, rather the shapres that move
+    // next two sections control the variable that change, rather the shapes that move
 
     // If the user pressed the left or right arrows move the board. Also check to make sure the board does not leave the screen.
     if (rightArrowDown && bx < canvas.width - bw) {
@@ -280,12 +280,12 @@ function paint() {
 }
 
     // Pass the paint function as the requestAnimationFrame callback.
-    // This function is called everytime the browser screen is repainted.
+    // This function is called every time the browser screen is repainted.
     // By calling the requestAnimationFrame function within the paint function and passing the paint function
     // as its callback parameter a recursive loop is started that will not reach the base case until the
     //  user wins or loses the game.
     requestAnimationFrame(paint);
 }
 
-// Call the paint fuction here first to start the recursion.
+// Call the paint function here first to start the recursion.
 paint();
