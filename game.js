@@ -74,34 +74,34 @@ for (var c = 0; c < blockColumnCount; c++) {
 }
 
 // Add listeners for key and mouse events.
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
+document.addEventListener("keydown", handleKeyDown, false);
+document.addEventListener("keyup", handlekeyUp, false);
+document.addEventListener("mousemove", handleMouseMove, false);
 
 // Check which arrow key was pressed.
 // When a button pressed the value will remain true until the  user release's the key and the keyUpHandler is called.
-function keyDownHandler(e) {
-    if (e.keyCode == 39) {
+function handleKeyDown(evt) {
+    if (evt.keyCode == 39) {
         rightArrowDown = true;
-    } else if (e.keyCode == 37) {
+    } else if (evt.keyCode == 37) {
         leftArrowDown = true;
-    } else if (e.keyCode == 32) {
+    } else if (evt.keyCode == 32) {
         paused = !paused;
     }
 }
 
 // Check which arrow key was released.
-function keyUpHandler(e) {
-    if (e.keyCode == 39) {
+function handlekeyUp(evt) {
+    if (evt.keyCode == 39) {
         rightArrowDown = false;
-    } else if (e.keyCode == 37) {
+    } else if (evt.keyCode == 37) {
         leftArrowDown = false;
     }
 }
 
 // Listener to dectect mouse movement so that the user can also use the mouse to move the board instead of the arrow keys.
-function mouseMoveHandler(e) {
-    var rx = e.clientX - canvas.offsetLeft;
+function handleMouseMove(evt) {
+    var rx = evt.clientX - canvas.offsetLeft;
     if (rx > 0 && rx < canvas.width) {
         bx = rx - bw / 2;
     }
