@@ -1,4 +1,4 @@
-// Get the canvas element from the HTML document. The canvas element is used to draw graphics on a web page.
+// Get the canvas element from the HTML document. The canvas element is used to paint graphics on a web page.
 var canvas = document.getElementById("myCanvas");
 // This variable contains the 2 dimensional contexts from the canvas element.
 var ctx = canvas.getContext("2d");
@@ -18,20 +18,20 @@ var paddleX = (canvas.width - paddleWidth) / 2;
 // Variables used to dectect the user's keyboard interaction.
 var rightPressed = false;
 var leftPressed = false;
-// Set number of bricks and set the bricks size.
-var brickRowCount = 4;
-var brickColumnCount = 2;
-var brickWidth = 115;
-var brickHeight = 20;
-// Set the brick's padding and margin offsets.
-var brickPadding = 8;
-var brickOffsetTop = 30;
-var brickOffsetLeft = 8;
+// Set number of blocks and set the blocks size.
+var blockRowCount = 8;
+var blockColumnCount = 4;
+var blockWidth = 115;
+var blockHeight = 20;
+// Set the block's padding and margin offsets.
+var blockPadding = 8;
+var blockOffsetTop = 30;
+var blockOffsetLeft = 8;
 // Initialize the game varialbes
 var player = '';
 var score = 0;
 var baseScore = 0;
-var lives = 30;
+var chances = 30;
 var paused = false;
 var level = 1;
 
@@ -56,16 +56,16 @@ if (sessionStorage.getItem("game_level")) {
     level = parseInt(sessionStorage.getItem("game_level"));
 }
 
-// Nested for loop that initializes the brick objects into a 2d array of bricks.
-var bricks = [];
-for (var c = 0; c < brickColumnCount; c++) {
-    // Initialize column bricks
-    bricks[c] = [];
-    for (var r = 0; r < brickRowCount; r++) {
-        // Initialize the x and y to zero and status to one. Status of one means the brick is still active
-        // and should be displayed on the screen. Zero means the brick has been desroyed from a collision and is
+// Nested for loop that initializes the block objects into a 2d array of blocks.
+var blocks = [];
+for (var c = 0; c < blockColumnCount; c++) {
+    // Initialize column blocks
+    blocks[c] = [];
+    for (var r = 0; r < blockRowCount; r++) {
+        // Initialize the x and y to zero and status to one. Status of one means the block is still active
+        // and should be displayed on the screen. Zero means the block has been desroyed from a collision and is
         // no longer active or displayed on the screen.
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
+        blocks[c][r] = { x: 0, y: 0, status: 1 };
     }
 }
 
@@ -106,23 +106,23 @@ function mouseMoveHandler(e) {
 function collisionDetection() {
     // Nested loop through the 2d array to check if a collision occured with any of the remaining blocks.
     // Adjust score accordingly and check if game over scenario is reached.
-    for (var c = 0; c < brickColumnCount; c++) {
-        for (var r = 0; r < brickRowCount; r++) {
-            var b = bricks[c][r];
+    for (var c = 0; c < blockColumnCount; c++) {
+        for (var r = 0; r < blockRowCount; r++) {
+            var b = blocks[c][r];
             if (b.status == 1) {
                 // The x and y variables correspond to the ball's x and y location.
-                // Compare these with the brick's (var b) x and y properties to see if there has been a collision.
+                // Compare these with the block's (var b) x and y properties to see if there has been a collision.
                // If there is a collision this next block of code will be executed.
-                if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                if (x > b.x && x < b.x + blockWidth && y > b.y && y < b.y + blockHeight) {
                     // Make the ball speed faster?
                     dy = -dy;
-                    // Set the brick's status to zero and increase the user's score.
+                    // Set the block's status to zero and increase the user's score.
                     b.status = 0;
                     score++;
-                    // Since the user receives one point for each brick destroyed, if the user's score is equal to
-                    // the total number of bricks then all the bricks must now be cleared and the game should reset
+                    // Since the user receives one point for each block destroyed, if the user's score is equal to
+                    // the total number of blocks then all the blocks must now be cleared and the game should reset
                     // and continue to the next level.
-                    if (score == brickRowCount * brickColumnCount) {
+                    if (score == blockRowCount * blockColumnCount) {
                         dx = Math.abs(dx) + 2;
                         level++;
                         window.sessionStorage.setItem('game_status', 'WON');
@@ -139,34 +139,34 @@ function collisionDetection() {
 }
 
 // Draw helper functions.
-// Everytime when drawing to the 2d canvas beginPath() must called first. After drawing closePath().
-function drawBall() {
+// Everytime when painting to the 2d canvas beginPath() must called first. After painting closePath().
+function paintBall() {
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
     ctx.fillStyle = "#C6E624";
     ctx.fill();
     ctx.closePath();
 }
-function drawPaddle() {
+function paintPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
     ctx.fillStyle = "#24E6B9";
     ctx.fill();
     ctx.closePath();
 }
-function drawBricks() {
-    for (var c = 0; c < brickColumnCount; c++) {
-        for (var r = 0; r < brickRowCount; r++) {
-            if (bricks[c][r].status == 1) {
-                // Multiple the bricks x and y coordinates by its respective row and column number
-                // so that it is drawn to the correct location on the screen.
-                var brickX = (r * (brickWidth + brickPadding)) + brickOffsetLeft;
-                var brickY = (c * (brickHeight + brickPadding)) + brickOffsetTop;
-                // Set the brick's x and y properties to check later for collision detection.
-                bricks[c][r].x = brickX;
-                bricks[c][r].y = brickY;
+function paintBlocks() {
+    for (var c = 0; c < blockColumnCount; c++) {
+        for (var r = 0; r < blockRowCount; r++) {
+            if (blocks[c][r].status == 1) {
+                // Multiple the blocks x and y coordinates by its respective row and column number
+                // so that it is painted to the correct location on the screen.
+                var blockX = (r * (blockWidth + blockPadding)) + blockOffsetLeft;
+                var blockY = (c * (blockHeight + blockPadding)) + blockOffsetTop;
+                // Set the block's x and y properties to check later for collision detection.
+                blocks[c][r].x = blockX;
+                blocks[c][r].y = blockY;
                 ctx.beginPath();
-                ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                ctx.rect(blockX, blockY, blockWidth, blockHeight);
                 ctx.fillStyle = "#246BE6";
                 ctx.fill();
                 ctx.closePath();
@@ -174,32 +174,32 @@ function drawBricks() {
         }
     }
 }
-function drawName() {
+function paintName() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#E69F24";
     ctx.fillText('Player: ' + player, (canvas.width / 2) - 40, 20);
 }
 
-function drawLevel() {
+function paintLevel() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#FF0000";
     ctx.fillText("Level: " + level, 8, 20);
 }
 
-function drawScore() {
+function paintScore() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#246BE6";
     ctx.fillText("Score: " + (baseScore + score), 75, 20);
 }
 
-function drawLives() {
+function paintChances() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#E62499";
-    ctx.fillText("Lives: " + lives, canvas.width - 70, 20);
+    ctx.fillText("Chance: " + chances, canvas.width - 70, 20);
 }
 
 // Function to handle game logic until a base case is reached.
-function draw() {
+function paint() {
     if (!paused){
     if (window.sessionStorage.getItem('player') == null) {
         player = prompt('Please enter your name:');
@@ -209,13 +209,13 @@ function draw() {
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawName();
-    drawBricks();
-    drawBall();
-    drawPaddle();
-    drawLevel();
-    drawScore();
-    drawLives();
+    paintName();
+    paintBlocks();
+    paintBall();
+    paintPaddle();
+    paintLevel();
+    paintScore();
+    paintChances();
     collisionDetection();
 
     // collision of ball with top, bottom, right, left, and paddle
@@ -230,8 +230,8 @@ function draw() {
         if (x > paddleX && x < paddleX + paddleWidth) {  // bounce off paddle
             dy = -dy;
         } else {  // die
-            lives--;
-            if (lives === 0) {
+            chances--;
+            if (chances === 0) {
                 sessionStorage.removeItem("game_speed");
                 sessionStorage.removeItem("game_score");
                 sessionStorage.removeItem("game_level");
@@ -261,13 +261,13 @@ function draw() {
 
 }
 
-    // Pass the draw function as the requestAnimationFrame callback.
+    // Pass the paint function as the requestAnimationFrame callback.
     // This function is called everytime the browser screen is repainted.
-    // By calling the requestAnimationFrame function within the draw function and passing the draw function
+    // By calling the requestAnimationFrame function within the paint function and passing the paint function
     // as its callback parameter a recursive loop is started that will not reach the base case until the
     //  user wins or loses the game.
-    requestAnimationFrame(draw);
+    requestAnimationFrame(paint);
 }
 
-// Call the draw fuction here first to start the recursion.
-draw();
+// Call the paint fuction here first to start the recursion.
+paint();
