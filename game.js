@@ -69,7 +69,11 @@ for (var c = 0; c < blockColumnCount; c++) {
         // Initialize the x and y to zero and status to one. Status of one means the block is still active
         // and should be displayed on the screen. Zero means the block has been destroyed from a collision and is
         // no longer active or displayed on the screen.
-        blocks[c][r] = { x: 0, y: 0, status: 1 };
+        blocks[c][r] = {
+            x: 0,
+            y: 0,
+            status: 1
+        };
     }
 }
 
@@ -116,7 +120,7 @@ function checkCollision() {
             if (b.status == 1) {
                 // The x and y variables correspond to the ball's x and y location.
                 // Compare these with the block's (var b) x and y properties to see if there has been a collision.
-               // If there is a collision this next block of code will be executed.
+                // If there is a collision this next block of code will be executed.
                 if (x > b.x && x < b.x + blockWidth && y > b.y && y < b.y + blockHeight) {
                     // Make the ball speed faster?
                     dy = -dy;
@@ -162,6 +166,7 @@ function paintBall() {
     context.fill();
     context.closePath();
 }
+
 function paintPaddle() {
     context.beginPath();
     context.rect(bx, canvas.height - bh, bw, bh);
@@ -169,6 +174,7 @@ function paintPaddle() {
     context.fill();
     context.closePath();
 }
+
 function paintBlocks() {
     for (var c = 0; c < blockColumnCount; c++) {
         for (var r = 0; r < blockRowCount; r++) {
@@ -218,66 +224,66 @@ function paintChances() {
 
 // Function to handle game logic until a base case is reached.
 function paint() {
-    if (!paused){
-    if (window.sessionStorage.getItem('player') == null) {
-        player = prompt('Please enter your name:');
-        window.sessionStorage.setItem('player', player);
-    } else {
-        player = window.sessionStorage.getItem('player');
-    }
+    if (!paused) {
+        if (window.sessionStorage.getItem('player') == null) {
+            player = prompt('Please enter your name:');
+            window.sessionStorage.setItem('player', player);
+        } else {
+            player = window.sessionStorage.getItem('player');
+        }
 
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    paintName();
-    paintBlocks();
-    paintBall();
-    paintPaddle();
-    paintLevel();
-    paintPoint();
-    paintChances();
-    checkCollision();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        paintName();
+        paintBlocks();
+        paintBall();
+        paintPaddle();
+        paintLevel();
+        paintPoint();
+        paintChances();
+        checkCollision();
 
-    // collision of ball with top, bottom, right, left, and board
-        if (x + dx > canvas.width - ballSize || x + dx < ballSize) {  //bounce ball off right side OR left side
-                
-        dx = -dx;
-    }
+        // collision of ball with top, bottom, right, left, and board
+        if (x + dx > canvas.width - ballSize || x + dx < ballSize) { //bounce ball off right side OR left side
 
-    if (y + dy < ballSize) { // handle ball bouncing off top
-        dy = -dy;
-    } else if (y + dy > canvas.height - ballSize) {  // reached bottom (die) or bounce off board
-        if (x > bx && x < bx + bw) {  // bounce off board
+            dx = -dx;
+        }
+
+        if (y + dy < ballSize) { // handle ball bouncing off top
             dy = -dy;
-        } else {  // die
-            chances--;
-            if (chances === 0) {
-                sessionStorage.removeItem("game_speed");
-                sessionStorage.removeItem("game_point");
-                sessionStorage.removeItem("game_level");
-                sessionStorage.setItem("game_status", "LOST");
-                alert("You died. Game over.");
-                document.location.reload();
-            } else {
-                alert("You died");
-                x = canvas.width / 2;
-                y = canvas.height - 30;
-                bx = (canvas.width - bw) / 2;
+        } else if (y + dy > canvas.height - ballSize) { // reached bottom (die) or bounce off board
+            if (x > bx && x < bx + bw) { // bounce off board
+                dy = -dy;
+            } else { // die
+                chances--;
+                if (chances === 0) {
+                    sessionStorage.removeItem("game_speed");
+                    sessionStorage.removeItem("game_point");
+                    sessionStorage.removeItem("game_level");
+                    sessionStorage.setItem("game_status", "LOST");
+                    alert("You died. Game over.");
+                    document.location.reload();
+                } else {
+                    alert("You died");
+                    x = canvas.width / 2;
+                    y = canvas.height - 30;
+                    bx = (canvas.width - bw) / 2;
+                }
             }
         }
+
+        // next two sections control the variable that change, rather the shapes that move
+
+        // If the user pressed the left or right arrows move the board. Also check to make sure the board does not leave the screen.
+        if (rightArrowDown && bx < canvas.width - bw) {
+            bx += 7;
+        } else if (leftArrowDown && bx > 0) {
+            bx -= 7;
+        }
+
+        x += dx;
+        y += dy;
+
     }
-
-    // next two sections control the variable that change, rather the shapes that move
-
-    // If the user pressed the left or right arrows move the board. Also check to make sure the board does not leave the screen.
-    if (rightArrowDown && bx < canvas.width - bw) {
-        bx += 7;
-    } else if (leftArrowDown && bx > 0) {
-        bx -= 7;
-    }
-
-    x += dx;
-    y += dy;
-
-}
 
     // Pass the paint function as the requestAnimationFrame callback.
     // This function is called every time the browser screen is repainted.
