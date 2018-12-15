@@ -1,20 +1,19 @@
 // Get the canvas element from the HTML document. The canvas element is used to paint graphics on a web page.
-var canvas = document.getElementById("myCanvas");
+var canvas = document.getElementById("ypGameCanvas");
 // This variable contains the 2 dimensional contexts from the canvas element.
 var ctx = canvas.getContext("2d");
-// Set the ball radius.
-var ballRadius = 10;
+var ballSize = 10;
 // Sets the ball's initial x and y coordinates
 var x = canvas.width / 2;
 var y = canvas.height - 30;
 // Initialize the velocity of the ball.
 var dx = 3;
 var dy = -3;
-// Set paddle size
-var paddleHeight = 15;
-var paddleWidth = 140;
+// Set board size
+var boardHeight = 15;
+var boardWidth = 140;
 //
-var paddleX = (canvas.width - paddleWidth) / 2;
+var boardX = (canvas.width - boardWidth) / 2;
 // Variables used to dectect the user's keyboard interaction.
 var rightPressed = false;
 var leftPressed = false;
@@ -95,11 +94,11 @@ function keyUpHandler(e) {
     }
 }
 
-// Listener to dectect mouse movement so that the user can also use the mouse to move the paddle instead of the arrow keys.
+// Listener to dectect mouse movement so that the user can also use the mouse to move the board instead of the arrow keys.
 function mouseMoveHandler(e) {
     var relativeX = e.clientX - canvas.offsetLeft;
     if (relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth / 2;
+        boardX = relativeX - boardWidth / 2;
     }
 }
 
@@ -142,14 +141,14 @@ function collisionDetection() {
 // Everytime when painting to the 2d canvas beginPath() must called first. After painting closePath().
 function paintBall() {
     ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+    ctx.arc(x, y, ballSize, 0, Math.PI * 2);
     ctx.fillStyle = "#C6E624";
     ctx.fill();
     ctx.closePath();
 }
 function paintPaddle() {
     ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    ctx.rect(boardX, canvas.height - boardHeight, boardWidth, boardHeight);
     ctx.fillStyle = "#24E6B9";
     ctx.fill();
     ctx.closePath();
@@ -167,7 +166,7 @@ function paintBlocks() {
                 blocks[c][r].y = blockY;
                 ctx.beginPath();
                 ctx.rect(blockX, blockY, blockWidth, blockHeight);
-                ctx.fillStyle = "#246BE6";
+                ctx.fillStyle = "#F5B6CD";
                 ctx.fill();
                 ctx.closePath();
             }
@@ -195,7 +194,7 @@ function paintScore() {
 function paintChances() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#E62499";
-    ctx.fillText("Chance: " + chances, canvas.width - 70, 20);
+    ctx.fillText("Chance: " + chances, canvas.width - 85, 20);
 }
 
 // Function to handle game logic until a base case is reached.
@@ -218,16 +217,16 @@ function paint() {
     paintChances();
     collisionDetection();
 
-    // collision of ball with top, bottom, right, left, and paddle
-        if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {  //bounce ball off right side OR left side
+    // collision of ball with top, bottom, right, left, and board
+        if (x + dx > canvas.width - ballSize || x + dx < ballSize) {  //bounce ball off right side OR left side
                 
         dx = -dx;
     }
 
-    if (y + dy < ballRadius) { // handle ball bouncing off top
+    if (y + dy < ballSize) { // handle ball bouncing off top
         dy = -dy;
-    } else if (y + dy > canvas.height - ballRadius) {  // reached botton (die) or bounce off paddle
-        if (x > paddleX && x < paddleX + paddleWidth) {  // bounce off paddle
+    } else if (y + dy > canvas.height - ballSize) {  // reached botton (die) or bounce off board
+        if (x > boardX && x < boardX + boardWidth) {  // bounce off board
             dy = -dy;
         } else {  // die
             chances--;
@@ -242,18 +241,18 @@ function paint() {
                 alert("You died");
                 x = canvas.width / 2;
                 y = canvas.height - 30;
-                paddleX = (canvas.width - paddleWidth) / 2;
+                boardX = (canvas.width - boardWidth) / 2;
             }
         }
     }
 
     // next two sections control the variable that change, rather the shapres that move
 
-    // If the user pressed the left or right arrows move the paddle. Also check to make sure the paddle does not leave the screen.
-    if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 7;
-    } else if (leftPressed && paddleX > 0) {
-        paddleX -= 7;
+    // If the user pressed the left or right arrows move the board. Also check to make sure the board does not leave the screen.
+    if (rightPressed && boardX < canvas.width - boardWidth) {
+        boardX += 7;
+    } else if (leftPressed && boardX > 0) {
+        boardX -= 7;
     }
 
     x += dx;
