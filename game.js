@@ -84,37 +84,36 @@ function PaddleAttack() {
     this.handleKeyDown = function (evt) {
         console.log(evt.keyCode);
         if (evt.keyCode == 39) {
-            rightArrowDown = true;
+            this.rightArrowDown = true;
         } else if (evt.keyCode == 37) {
-            leftArrowDown = true;
+            this.leftArrowDown = true;
         } else if (evt.keyCode == 32) {
-            paused = !paused;
+            this.paused = !this.paused;
         }
-    };
+    }.bind(this);
 
     // Check which arrow key was released.
     this.handleKeyUp = function (evt) {
         if (evt.keyCode == 39) {
-            rightArrowDown = false;
+            this.rightArrowDown = false;
         } else if (evt.keyCode == 37) {
-            leftArrowDown = false;
+            this.leftArrowDown = false;
         }
-    };
+    }.bind(this);
 
     // Listener to detect mouse movement so that the user can also use the mouse to move the board instead of the arrow keys.
     this.handleMouseMove = function (evt) {
-        
         var rx = evt.clientX - this.canvas.offsetLeft;
         if (rx > 0 && rx < this.canvas.width) {
             this.bx = rx - this.bw / 2;
         }
-    };
+    }.bind(this);
 
     // Add listeners for key and mouse events.
     document.addEventListener("keydown", this.handleKeyDown, false);
     document.addEventListener("keyup", this.handleKeyUp, false);
     document.addEventListener("mousemove", this.handleMouseMove, false);
-  
+
     this.checkCollision = function () {
         // Nested loop through the 2d array to check if a collision occurred with any of the remaining blocks.
         // Adjust point accordingly and check if game over scenario is reached.
