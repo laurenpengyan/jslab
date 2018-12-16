@@ -1,18 +1,47 @@
+// Title style config
+var titleFont = "18px Helvetica";
+var titleNameColor = "#E69F24";
+var titleLevelColor = "#FF0000";
+var titlePointColor = "#246BE6";
+var titleChancesColor ="#E62499";
+
+// Initialize the game variables
+var player = '';
+var point = 0;
+var basePoint = 0;
+var chances = 30;
+var level = 1;
+
+
+// Set number of blocks and set the blocks size.
+var blockRowCount = 8;
+var blockColumnCount = 4;
+var blockWidth = 115;
+var blockHeight = 20;
+
+// Set the block's padding and margin offsets.
+var blockPadding = 8;
+var blockOffsetTop = 30;
+var blockOffsetLeft = 8;
+
+// Ball size
+var ballSize = 10;
+
+// Velocity of the ball.
+var dx = 6;
+var dy = -6;
+
 // Get the canvas element from the HTML document. The canvas element is used to paint graphics on a web page.
 var canvas = document.getElementById("ypGameCanvas");
 // This variable contains the 2 dimensional contexts from the canvas element.
 var context = canvas.getContext("2d");
 
-// Ball size
-var ballSize = 10;
 
 // Sets the ball's initial x and y coordinates
 var x = canvas.width / 2;
 var y = canvas.height - 30;
 
-// Initialize the velocity of the ball.
-var dx = 3;
-var dy = -3;
+
 
 // Set board size
 var bh = 15;
@@ -22,22 +51,9 @@ var bx = (canvas.width - bw) / 2;
 // Variables used to detect the user's keyboard interaction.
 var rightArrowDown = false;
 var leftArrowDown = false;
-// Set number of blocks and set the blocks size.
-var blockRowCount = 8;
-var blockColumnCount = 4;
-var blockWidth = 115;
-var blockHeight = 20;
-// Set the block's padding and margin offsets.
-var blockPadding = 8;
-var blockOffsetTop = 30;
-var blockOffsetLeft = 8;
-// Initialize the game variables
-var player = '';
-var point = 0;
-var basePoint = 0;
-var chances = 30;
+
+// Pause flag
 var paused = false;
-var level = 1;
 
 // Fetch the key/value pairs from the sessionStore object which stores the values in the window memory.
 // The sessionStorage object stores data for only one session unlike localStorage. Therefore these values will
@@ -79,7 +95,7 @@ for (var c = 0; c < blockColumnCount; c++) {
 
 // Add listeners for key and mouse events.
 document.addEventListener("keydown", handleKeyDown, false);
-document.addEventListener("keyup", handlekeyUp, false);
+document.addEventListener("keyup", handleKeyUp, false);
 document.addEventListener("mousemove", handleMouseMove, false);
 
 // Check which arrow key was pressed.
@@ -95,7 +111,7 @@ function handleKeyDown(evt) {
 }
 
 // Check which arrow key was released.
-function handlekeyUp(evt) {
+function handleKeyUp(evt) {
     if (evt.keyCode == 39) {
         rightArrowDown = false;
     } else if (evt.keyCode == 37) {
@@ -103,12 +119,23 @@ function handlekeyUp(evt) {
     }
 }
 
-// Listener to dectect mouse movement so that the user can also use the mouse to move the board instead of the arrow keys.
+// Listener to detect mouse movement so that the user can also use the mouse to move the board instead of the arrow keys.
 function handleMouseMove(evt) {
     var rx = evt.clientX - canvas.offsetLeft;
     if (rx > 0 && rx < canvas.width) {
         bx = rx - bw / 2;
     }
+}
+
+// Generate random color
+function getColor() {
+    var result = '#';
+
+    var hc = '0123456789ABCDEF';
+    for (var i = 0; i < 6; i++) {
+        result += hc[Math.floor(Math.random() * 16)];
+    }
+    return result;
 }
 
 function checkCollision() {
@@ -144,17 +171,6 @@ function checkCollision() {
             }
         }
     }
-}
-
-// Generate random color
-function getColor() {
-    var result = '#';
-
-    var hc = '0123456789ABCDEF';
-    for (var i = 0; i < 6; i++) {
-        result += hc[Math.floor(Math.random() * 16)];
-    }
-    return result;
 }
 
 // Draw helper functions.
@@ -203,22 +219,22 @@ function setContextStyle(font, fillStyle) {
 }
 
 function paintName() {
-    setContextStyle("18px Helvetica", "#E69F24");
+    setContextStyle(titleFont, titleNameColor);
     context.fillText('Player: ' + player, (canvas.width / 2) - 40, 20);
 }
 
 function paintLevel() {
-    setContextStyle("18px Helvetica", "#FF0000");
+    setContextStyle(titleFont, titleLevelColor);
     context.fillText("Level: " + level, 8, 20);
 }
 
 function paintPoint() {
-    setContextStyle("18px Helvetica", "#246BE6");
+    setContextStyle(titleFont, titlePointColor);
     context.fillText("Point: " + (basePoint + point), 75, 20);
 }
 
 function paintChances() {
-    setContextStyle("18px Helvetica", "#E62499");
+    setContextStyle(titleFont, titleChancesColor);
     context.fillText("Chances: " + chances, canvas.width - 105, 20);
 }
 
