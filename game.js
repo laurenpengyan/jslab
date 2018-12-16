@@ -1,297 +1,299 @@
-// Get the canvas element from the HTML document. The canvas element is used to paint graphics on a web page.
-var canvas = document.getElementById("ypGameCanvas");
-// This variable contains the 2 dimensional contexts from the canvas element.
-var context = canvas.getContext("2d");
+function PaddleAttack() {
 
-// Ball size
-var ballSize = 10;
+    // Get the canvas element from the HTML document. The canvas element is used to paint graphics on a web page.
+    this.canvas = document.getElementById("ypGameCanvas");
+    // This variable contains the 2 dimensional contexts from the canvas element.
+    this.context = this.canvas.getContext("2d");
 
-// Sets the ball's initial x and y coordinates
-var x = canvas.width / 2;
-var y = canvas.height - 30;
+    // Ball size
+    this.ballSize = 10;
 
-// Initialize the velocity of the ball.
-var dx = 3;
-var dy = -3;
+    // Sets the ball's initial x and y coordinates
+    this.x = this.canvas.width / 2;
+    this.y = this.canvas.height - 30;
 
-// Set board size
-var bh = 15;
-var bw = 140;
-//
-var bx = (canvas.width - bw) / 2;
-// Variables used to detect the user's keyboard interaction.
-var rightArrowDown = false;
-var leftArrowDown = false;
-// Set number of blocks and set the blocks size.
-var blockRowCount = 8;
-var blockColumnCount = 4;
-var blockWidth = 115;
-var blockHeight = 20;
-// Set the block's padding and margin offsets.
-var blockPadding = 8;
-var blockOffsetTop = 30;
-var blockOffsetLeft = 8;
-// Initialize the game variables
-var player = '';
-var point = 0;
-var basePoint = 0;
-var chances = 30;
-var paused = false;
-var level = 1;
+    // Initialize the velocity of the ball.
+    this.dx = 3;
+    this.dy = -3;
 
-// Fetch the key/value pairs from the sessionStore object which stores the values in the window memory.
-// The sessionStorage object stores data for only one session unlike localStorage. Therefore these values will
-// only be set from sessionStorage if the user recently played at least one game. Otherwise the default values
-// will be used.
+    // Set board size
+    this.bh = 15;
+    this.bw = 140;
+    //
+    this.bx = (this.canvas.width - this.bw) / 2;
+    // Variables used to detect the user's keyboard interaction.
+    this.rightArrowDown = false;
+    this.leftArrowDown = false;
+    // Set number of blocks and set the blocks size.
+    this.blockRowCount = 8;
+    this.blockColumnCount = 4;
+    this.blockWidth = 115;
+    this.blockHeight = 20;
+    // Set the block's padding and margin offsets.
+    this.blockPadding = 8;
+    this.blockOffsetTop = 30;
+    this.blockOffsetLeft = 8;
+    // Initialize the game variables
+    this.player = '';
+    this.point = 0;
+    this.basePoint = 0;
+    this.chances = 30;
+    this.paused = false;
+    this.level = 1;
 
-// Set initial speed
-if (sessionStorage.getItem("game_speed")) {
-    dx = parseInt(sessionStorage.getItem("game_speed"));
-    dy = -dx;
-}
+    // Fetch the key/value pairs from the sessionStore object which stores the values in the window memory.
+    // The sessionStorage object stores data for only one session unlike localStorage. Therefore these values will
+    // only be set from sessionStorage if the user recently played at least one game. Otherwise the default values
+    // will be used.
 
-// Set the initial point
-if (sessionStorage.getItem("game_point")) {
-    basePoint = parseInt(sessionStorage.getItem("game_point"));
-}
-
-// Set the initial game level
-if (sessionStorage.getItem("game_level")) {
-    level = parseInt(sessionStorage.getItem("game_level"));
-}
-
-// Nested for loop that initializes the block objects into a 2d array of blocks.
-var blocks = [];
-for (var c = 0; c < blockColumnCount; c++) {
-    // Initialize column blocks
-    blocks[c] = [];
-    for (var r = 0; r < blockRowCount; r++) {
-        // Initialize the x and y to zero and status to one. Status of one means the block is still active
-        // and should be displayed on the screen. Zero means the block has been destroyed from a collision and is
-        // no longer active or displayed on the screen.
-        blocks[c][r] = {
-            x: 0,
-            y: 0,
-            status: 1
-        };
+    // Set initial speed
+    if (sessionStorage.getItem("game_speed")) {
+        dx = parseInt(sessionStorage.getItem("game_speed"));
+        dy = -dx;
     }
-}
 
-// Add listeners for key and mouse events.
-document.addEventListener("keydown", handleKeyDown, false);
-document.addEventListener("keyup", handlekeyUp, false);
-document.addEventListener("mousemove", handleMouseMove, false);
-
-// Check which arrow key was pressed.
-// When a button pressed the value will remain true until the  user release's the key and the keyUpHandler is called.
-function handleKeyDown(evt) {
-    if (evt.keyCode == 39) {
-        rightArrowDown = true;
-    } else if (evt.keyCode == 37) {
-        leftArrowDown = true;
-    } else if (evt.keyCode == 32) {
-        paused = !paused;
+    // Set the initial point
+    if (sessionStorage.getItem("game_point")) {
+        basePoint = parseInt(sessionStorage.getItem("game_point"));
     }
-}
 
-// Check which arrow key was released.
-function handlekeyUp(evt) {
-    if (evt.keyCode == 39) {
-        rightArrowDown = false;
-    } else if (evt.keyCode == 37) {
-        leftArrowDown = false;
+    // Set the initial game level
+    if (sessionStorage.getItem("game_level")) {
+        level = parseInt(sessionStorage.getItem("game_level"));
     }
-}
 
-// Listener to dectect mouse movement so that the user can also use the mouse to move the board instead of the arrow keys.
-function handleMouseMove(evt) {
-    var rx = evt.clientX - canvas.offsetLeft;
-    if (rx > 0 && rx < canvas.width) {
-        bx = rx - bw / 2;
+    // Nested for loop that initializes the block objects into a 2d array of blocks.
+    this.blocks = [];
+    for (var c = 0; c < this.blockColumnCount; c++) {
+        // Initialize column blocks
+        this.blocks[c] = [];
+        for (var r = 0; r < this.blockRowCount; r++) {
+            // Initialize the x and y to zero and status to one. Status of one means the block is still active
+            // and should be displayed on the screen. Zero means the block has been destroyed from a collision and is
+            // no longer active or displayed on the screen.
+            this.blocks[c][r] = {
+                x: 0,
+                y: 0,
+                status: 1
+            };
+        }
     }
-}
 
-function checkCollision() {
-    // Nested loop through the 2d array to check if a collision occurred with any of the remaining blocks.
-    // Adjust point accordingly and check if game over scenario is reached.
-    for (var c = 0; c < blockColumnCount; c++) {
-        for (var r = 0; r < blockRowCount; r++) {
-            var b = blocks[c][r];
-            if (b.status == 1) {
-                // The x and y variables correspond to the ball's x and y location.
-                // Compare these with the block's (var b) x and y properties to see if there has been a collision.
-                // If there is a collision this next block of code will be executed.
-                if (x > b.x && x < b.x + blockWidth && y > b.y && y < b.y + blockHeight) {
-                    // Make the ball speed faster?
-                    dy = -dy;
-                    // Set the block's status to zero and increase the user's point.
-                    b.status = 0;
-                    point++;
-                    // Since the user receives one point for each block destroyed, if the user's point is equal to
-                    // the total number of blocks then all the blocks must now be cleared and the game should reset
-                    // and continue to the next level.
-                    if (point == blockRowCount * blockColumnCount) {
-                        dx = Math.abs(dx) + 2;
-                        level++;
-                        window.sessionStorage.setItem('game_status', 'WON');
-                        window.sessionStorage.setItem('game_speed', Math.abs(dx));
-                        window.sessionStorage.setItem('game_level', level);
-                        window.sessionStorage.setItem('game_point', (basePoint + point));
-                        alert("YOU WIN, CONGRATS! NEXT LEVEL " + level);
-                        document.location.reload();
+    // Check which arrow key was pressed.
+    // When a button pressed the value will remain true until the  user release's the key and the keyUpHandler is called.
+    this.handleKeyDown = function (evt) {
+        console.log(evt.keyCode);
+        if (evt.keyCode == 39) {
+            rightArrowDown = true;
+        } else if (evt.keyCode == 37) {
+            leftArrowDown = true;
+        } else if (evt.keyCode == 32) {
+            paused = !paused;
+        }
+    };
+
+    // Check which arrow key was released.
+    this.handleKeyUp = function (evt) {
+        if (evt.keyCode == 39) {
+            rightArrowDown = false;
+        } else if (evt.keyCode == 37) {
+            leftArrowDown = false;
+        }
+    };
+
+    // Listener to detect mouse movement so that the user can also use the mouse to move the board instead of the arrow keys.
+    this.handleMouseMove = function (evt) {
+        
+        var rx = evt.clientX - this.canvas.offsetLeft;
+        if (rx > 0 && rx < this.canvas.width) {
+            this.bx = rx - this.bw / 2;
+        }
+    };
+
+    // Add listeners for key and mouse events.
+    document.addEventListener("keydown", this.handleKeyDown, false);
+    document.addEventListener("keyup", this.handleKeyUp, false);
+    document.addEventListener("mousemove", this.handleMouseMove, false);
+  
+    this.checkCollision = function () {
+        // Nested loop through the 2d array to check if a collision occurred with any of the remaining blocks.
+        // Adjust point accordingly and check if game over scenario is reached.
+        for (var c = 0; c < this.blockColumnCount; c++) {
+            for (var r = 0; r < this.blockRowCount; r++) {
+                var b = this.blocks[c][r];
+                if (b.status == 1) {
+                    // The x and y variables correspond to the ball's x and y location.
+                    // Compare these with the block's (var b) x and y properties to see if there has been a collision.
+                    // If there is a collision this next block of code will be executed.
+                    if (this.x > b.x && this.x < b.x + this.blockWidth && this.y > b.y && this.y < b.y + this.blockHeight) {
+                        // Make the ball speed faster?
+                        this.dy = -this.dy;
+                        // Set the block's status to zero and increase the user's point.
+                        b.status = 0;
+                        this.point++;
+                        // Since the user receives one point for each block destroyed, if the user's point is equal to
+                        // the total number of blocks then all the blocks must now be cleared and the game should reset
+                        // and continue to the next level.
+                        if (this.point == this.blockRowCount * this.blockColumnCount) {
+                            this.dx = Math.abs(this.dx) + 2;
+                            this.level++;
+                            window.sessionStorage.setItem('game_status', 'WON');
+                            window.sessionStorage.setItem('game_speed', Math.abs(this.dx));
+                            window.sessionStorage.setItem('game_level', this.level);
+                            window.sessionStorage.setItem('game_point', (this.basePoint + this.point));
+                            alert("YOU WIN, CONGRATS! NEXT LEVEL " + this.level);
+                            document.location.reload();
+                        }
                     }
                 }
             }
         }
-    }
-}
+    };
 
-// Generate random color
-function getColor() {
-    var result = '#';
+    // Generate random color
+    this.getColor = function () {
+        var result = '#';
 
-    var hc = '0123456789ABCDEF';
-    for (var i = 0; i < 6; i++) {
-        result += hc[Math.floor(Math.random() * 16)];
-    }
-    return result;
-}
-
-// Draw helper functions.
-// Every time when painting to the 2d canvas beginPath() must called first. After painting closePath().
-function paintBall() {
-    context.beginPath();
-    context.arc(x, y, ballSize, 0, Math.PI * 2);
-    context.fillStyle = getColor();
-    context.fill();
-    context.closePath();
-}
-
-function paintPaddle() {
-    context.beginPath();
-    context.rect(bx, canvas.height - bh, bw, bh);
-    context.fillStyle = getColor();
-    context.fill();
-    context.closePath();
-}
-
-function paintBlocks() {
-    for (var c = 0; c < blockColumnCount; c++) {
-        for (var r = 0; r < blockRowCount; r++) {
-            if (blocks[c][r].status == 1) {
-                // Multiple the blocks x and y coordinates by its respective row and column number
-                // so that it is painted to the correct location on the screen.
-                var blockX = (r * (blockWidth + blockPadding)) + blockOffsetLeft;
-                var blockY = (c * (blockHeight + blockPadding)) + blockOffsetTop;
-                // Set the block's x and y properties to check later for collision detection.
-                blocks[c][r].x = blockX;
-                blocks[c][r].y = blockY;
-                context.beginPath();
-                context.rect(blockX, blockY, blockWidth, blockHeight);
-                // Use random color: "#F5B6CD";
-                context.fillStyle = "#F5B6CD";
-                context.fill();
-                context.closePath();
-            }
+        var hc = '0123456789ABCDEF';
+        for (var i = 0; i < 6; i++) {
+            result += hc[Math.floor(Math.random() * 16)];
         }
-    }
-}
+        return result;
+    };
 
-function setContextStyle(font, fillStyle) {
-    context.font = font;
-    context.fillStyle = fillStyle;
-}
+    // Draw helper functions.
+    // Every time when painting to the 2d canvas beginPath() must called first. After painting closePath().
+    this.paintBall = function () {
+        this.context.beginPath();
+        this.context.arc(this.x, this.y, this.ballSize, 0, Math.PI * 2);
+        this.context.fillStyle = this.getColor();
+        this.context.fill();
+        this.context.closePath();
+    };
 
-function paintName() {
-    setContextStyle("18px Helvetica", "#E69F24");
-    context.fillText('Player: ' + player, (canvas.width / 2) - 40, 20);
-}
+    this.paintPaddle = function () {
+        this.context.beginPath();
+        this.context.rect(this.bx, this.canvas.height - this.bh, this.bw, this.bh);
+        this.context.fillStyle = this.getColor();
+        this.context.fill();
+        this.context.closePath();
+    };
 
-function paintLevel() {
-    setContextStyle("18px Helvetica", "#FF0000");
-    context.fillText("Level: " + level, 8, 20);
-}
+    this.paintBlocks = function () {
+        for (var c = 0; c < this.blockColumnCount; c++) {
+            for (var r = 0; r < this.blockRowCount; r++) {
+                if (this.blocks[c][r].status == 1) {
+                    // Multiple the blocks x and y coordinates by its respective row and column number
+                    // so that it is painted to the correct location on the screen.
+                    var blockX = (r * (this.blockWidth + this.blockPadding)) + this.blockOffsetLeft;
+                    var blockY = (c * (this.blockHeight + this.blockPadding)) + this.blockOffsetTop;
+                    // Set the block's x and y properties to check later for collision detection.
+                    this.blocks[c][r].x = blockX;
+                    this.blocks[c][r].y = blockY;
 
-function paintPoint() {
-    setContextStyle("18px Helvetica", "#246BE6");
-    context.fillText("Point: " + (basePoint + point), 75, 20);
-}
+                    this.context.beginPath();
+                    this.context.rect(blockX, blockY, this.blockWidth, this.blockHeight);
 
-function paintChances() {
-    setContextStyle("18px Helvetica", "#E62499");
-    context.fillText("Chances: " + chances, canvas.width - 105, 20);
-}
+                    // Use random color: "#F5B6CD";
+                    this.context.fillStyle = "#F5B6CD";
 
-// Function to handle game logic until a base case is reached.
-function paint() {
-    if (!paused) {
-        if (window.sessionStorage.getItem('player') == null) {
-            player = prompt('Please enter your name:');
-            window.sessionStorage.setItem('player', player);
-        } else {
-            player = window.sessionStorage.getItem('player');
-        }
-
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        paintName();
-        paintBlocks();
-        paintBall();
-        paintPaddle();
-        paintLevel();
-        paintPoint();
-        paintChances();
-        checkCollision();
-
-        // collision of ball with top, bottom, right, left, and board
-        if (x + dx > canvas.width - ballSize || x + dx < ballSize) { //bounce ball off right side OR left side
-
-            dx = -dx;
-        }
-
-        if (y + dy < ballSize) { // handle ball bouncing off top
-            dy = -dy;
-        } else if (y + dy > canvas.height - ballSize) { // reached bottom (die) or bounce off board
-            if (x > bx && x < bx + bw) { // bounce off board
-                dy = -dy;
-            } else { // die
-                chances--;
-                if (chances === 0) {
-                    sessionStorage.removeItem("game_speed");
-                    sessionStorage.removeItem("game_point");
-                    sessionStorage.removeItem("game_level");
-                    sessionStorage.setItem("game_status", "LOST");
-                    alert("You died. Game over.");
-                    document.location.reload();
-                } else {
-                    alert("You died");
-                    x = canvas.width / 2;
-                    y = canvas.height - 30;
-                    bx = (canvas.width - bw) / 2;
+                    this.context.fill();
+                    this.context.closePath();
                 }
             }
         }
+    };
 
-        // next two sections control the variable that change, rather the shapes that move
+    this.setContextStyle = function (font, fillStyle) {
+        this.context.font = font;
+        this.context.fillStyle = fillStyle;
+    };
 
-        // If the user pressed the left or right arrows move the board. Also check to make sure the board does not leave the screen.
-        if (rightArrowDown && bx < canvas.width - bw) {
-            bx += 7;
-        } else if (leftArrowDown && bx > 0) {
-            bx -= 7;
+    this.paintName = function () {
+        this.setContextStyle("18px Helvetica", "#E69F24");
+        this.context.fillText('Player: ' + this.player, (this.canvas.width / 2) - 40, 20);
+    };
+
+    this.paintLevel = function () {
+        this.setContextStyle("18px Helvetica", "#FF0000");
+        this.context.fillText("Level: " + this.level, 8, 20);
+    };
+
+    this.paintPoint = function () {
+        this.setContextStyle("18px Helvetica", "#246BE6");
+        this.context.fillText("Point: " + (this.basePoint + this.point), 75, 20);
+    };
+
+    this.paintChances = function () {
+        this.setContextStyle("18px Helvetica", "#E62499");
+        this.context.fillText("Chances: " + this.chances, this.canvas.width - 105, 20);
+    };
+
+    this.paintMain = function () {
+        if (!this.paused) {
+            if (window.sessionStorage.getItem('player') == null) {
+                this.player = prompt('Please enter your name:');
+                window.sessionStorage.setItem('player', this.player);
+            } else {
+                this.player = window.sessionStorage.getItem('player');
+            }
+
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.paintName();
+            this.paintBlocks();
+            this.paintBall();
+            this.paintPaddle();
+            this.paintLevel();
+            this.paintPoint();
+            this.paintChances();
+            this.checkCollision();
+
+            // collision of ball with top, bottom, right, left, and board
+            if (this.x + this.dx > this.canvas.width - this.ballSize || this.x + this.dx < this.ballSize) { //bounce ball off right side OR left side
+                this.dx = -this.dx;
+            }
+
+            if (this.y + this.dy < this.ballSize) { // handle ball bouncing off top
+                this.dy = -this.dy;
+            } else if (this.y + this.dy > this.canvas.height - this.ballSize) { // reached bottom (die) or bounce off board
+                if (this.x > this.bx && this.x < this.bx + this.bw) { // bounce off board
+                    this.dy = -this.dy;
+                } else { // die
+                    this.chances--;
+                    if (this.chances === 0) {
+                        sessionStorage.removeItem("game_speed");
+                        sessionStorage.removeItem("game_point");
+                        sessionStorage.removeItem("game_level");
+                        sessionStorage.setItem("game_status", "LOST");
+                        alert("You died. Game over.");
+                        document.location.reload();
+                    } else {
+                        alert("You died");
+                        this.x = this.canvas.width / 2;
+                        this.y = this.canvas.height - 30;
+                        this.bx = (this.canvas.width - this.bw) / 2;
+                    }
+                }
+            }
+
+            // next two sections control the variable that change, rather the shapes that move
+
+            // If the user pressed the left or right arrows move the board. Also check to make sure the board does not leave the screen.
+            if (this.rightArrowDown && this.bx < this.canvas.width - this.bw) {
+                this.bx += 7;
+            } else if (this.leftArrowDown && this.bx > 0) {
+                this.bx -= 7;
+            }
+
+            this.x += this.dx;
+            this.y += this.dy;
         }
 
-        x += dx;
-        y += dy;
+        window.requestAnimationFrame(this.paintMain);
+    }.bind(this);
 
-    }
-
-    // Pass the paint function as the requestAnimationFrame callback.
-    // This function is called every time the browser screen is repainted.
-    // By calling the requestAnimationFrame function within the paint function and passing the paint function
-    // as its callback parameter a recursive loop is started that will not reach the base case until the
-    //  user wins or loses the game.
-    requestAnimationFrame(paint);
 }
 
 // Call the paint function here first to start the recursion.
-paint();
+var app = new PaddleAttack();
+app.paintMain();
