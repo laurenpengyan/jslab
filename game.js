@@ -13,8 +13,8 @@ function PaddleAttack() {
     this.y = this.canvas.height - 30;
 
     // Initialize the velocity of the ball.
-    this.dx = 3;
-    this.dy = -3;
+    this.dx = 4;
+    this.dy = -4;
 
     // Set board size
     this.bh = 15;
@@ -25,10 +25,10 @@ function PaddleAttack() {
     this.rightArrowDown = false;
     this.leftArrowDown = false;
     // Set number of blocks and set the blocks size.
-    this.blockRowCount = 8;
-    this.blockColumnCount = 4;
-    this.blockWidth = 115;
-    this.blockHeight = 20;
+    this.blockRowCount = 6;
+    this.blockColumnCount = 3;
+    this.blockWidth = 157;
+    this.blockHeight = 30;
     // Set the block's padding and margin offsets.
     this.blockPadding = 8;
     this.blockOffsetTop = 30;
@@ -37,7 +37,7 @@ function PaddleAttack() {
     this.player = '';
     this.point = 0;
     this.basePoint = 0;
-    this.chances = 30;
+    this.chances = 10;
     this.paused = false;
     this.level = 1;
 
@@ -48,18 +48,18 @@ function PaddleAttack() {
 
     // Set initial speed
     if (sessionStorage.getItem("game_speed")) {
-        dx = parseInt(sessionStorage.getItem("game_speed"));
-        dy = -dx;
+        this.dx = parseInt(sessionStorage.getItem("game_speed"));
+        this.dy = -this.dx;
     }
 
     // Set the initial point
     if (sessionStorage.getItem("game_point")) {
-        basePoint = parseInt(sessionStorage.getItem("game_point"));
+        this.basePoint = parseInt(sessionStorage.getItem("game_point"));
     }
 
     // Set the initial game level
     if (sessionStorage.getItem("game_level")) {
-        level = parseInt(sessionStorage.getItem("game_level"));
+        this.level = parseInt(sessionStorage.getItem("game_level"));
     }
 
     // Nested for loop that initializes the block objects into a 2d array of blocks.
@@ -147,7 +147,7 @@ function PaddleAttack() {
                 }
             }
         }
-    };
+    }.bind(this);
 
     // Generate random color
     this.getColor = function () {
